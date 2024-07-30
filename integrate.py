@@ -14,26 +14,17 @@ def read_csv(csv_path):
         path_XYs.append(XYs)
     return path_XYs
 
-def plot(paths_XYs):
-    fig, ax = plt.subplots(tight_layout=True, figsize=(8, 8))
-    colours = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
-    for i, XYs in enumerate(paths_XYs):
-        c = colours[i % len(colours)]
-        for XY in XYs:
-            ax.plot(XY[:, 0], XY[:, 1], c=c, linewidth=2) 
-    ax.set_aspect('equal')
-    plt.show()
-
+# Function to approximate contours to polygons and find the best rectangle
 def find_best_rectangle(contours):
     best_rect = None
     min_diff = float('inf')
     for contour in contours:
-        epsilon = 0.02 * cv2.arcLength(contour, True)
+        epsilon = 0.03 * cv2.arcLength(contour, True)
         approx = cv2.approxPolyDP(contour, epsilon, True)
         if len(approx) == 4:  # Check if the approximated contour has 4 vertices
             rect = cv2.minAreaRect(approx)
             box = cv2.boxPoints(rect)
-            box = np.int32(box)
+            box = np.int0(box)
             # Calculate the difference between the contour area and the rectangle area
             contour_area = cv2.contourArea(contour)
             rect_area = cv2.contourArea(box)
@@ -43,62 +34,30 @@ def find_best_rectangle(contours):
                 best_rect = box
     return best_rect
 
+# Function to regularize the corners to form a perfect rectangle
 def regularize_corners(corners):
     rect = cv2.minAreaRect(np.array(corners))
     box = cv2.boxPoints(rect)
-    box = np.int32(box)
+    box = np.int0(box)
     return box
 
-def detect_circles(paths_XYs):
-    # Create a blank image
-    img_size = 1000  # Adjust size as needed
-    img = np.zeros((img_size, img_size, 3), dtype=np.uint8)
-
-    # Draw the paths on the image
-    for XYs in paths_XYs:
-        for XY in XYs:
-            for x, y in XY:
-                cv2.circle(img, (int(x), int(y)), 2, (255, 255, 255), -1)
-
+def detect_circles(img, gray):    
     # Convert to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    gray = cv2.medianBlur(gray, 5)
+    grayC = cv2.medianBlur(gray, 5)
 
     # Detect circles
-    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 2000,
+    circles = cv2.HoughCircles(grayC, cv2.HOUGH_GRADIENT, 1, 2000,
                               param1=50, param2=30, minRadius=0, maxRadius=0)
 
     if circles is not None:
-        detected_circles = np.uint16(np.around(circles))
-        for (x, y, r) in detected_circles[0, :]:
-            cv2.circle(img, (x, y), r, (0, 0, 255), 3)
-            cv2.circle(img, (x, y), 2, (0, 255, 255), 3)
-        return True, img
+        return circles, img
     else:
-        return False, img
+        return None, img
 
-def detect_lines(paths_XYs):
-    # Create a blank image
-    img_size = 1000  # Adjust size as needed
-    img = np.zeros((img_size, img_size, 3), dtype=np.uint8)
-
-    # Draw the paths on the image
-    for XYs in paths_XYs:
-        for XY in XYs:
-            for x, y in XY:
-                cv2.rectangle(img, (int(x), int(y)), (int(x+2), int(y+2)), (255, 255, 255), -1)
-
-    # Convert to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    print("Converted to grayscale.")
-
+def detect_lines(paths_XYs, gray, edges, img):  
     # Apply Gaussian blur
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
     print("Gaussian blur applied.")
-
-    # Apply edge detection
-    edges = cv2.Canny(blurred, 50, 150, apertureSize=3)
-    print("Edge detection applied.")
 
     # Detect lines using Probabilistic Hough Line Transform
     lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=50, minLineLength=30, maxLineGap=5)
@@ -124,31 +83,33 @@ def detect_lines(paths_XYs):
     filtered_lines = filter_lines(lines)
     print(f"Filtered to {len(filtered_lines)} lines.")
 
-    # Draw the lines on the image
-    if filtered_lines:
-        for line in filtered_lines:
-            x1, y1, x2, y2 = line[0]
-            cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-
     return filtered_lines, img
 
 # Main pipeline function
 def main_pipeline(csv_path):
     paths_XYs = read_csv(csv_path)
-    plot(paths_XYs)
     if paths_XYs is None:
-        raise ValueError("Paths not found or unable to load.")
-    print("Paths loaded successfully.")
+        raise ValueError("Image not found or unable to load.")
+    print("Image loaded successfully.")
 
-    # Create a blank image
-    img_size = 1000  # Adjust size as needed
-    img = np.zeros((img_size, img_size, 3), dtype=np.uint8)
+    # Determine the size of the image based on the coordinates
+    all_coords = np.vstack([np.vstack(XY) for XYs in paths_XYs for XY in XYs])
+    min_x, min_y = np.min(all_coords, axis=0)
+    max_x, max_y = np.max(all_coords, axis=0)
+    
+    img_width = int(max_x - min_x + 1)
+    img_height = int(max_y - min_y + 1)
 
-    # Draw the paths on the image
+    # Create a blank image with the determined size
+    img = np.zeros((img_height, img_width, 3), dtype=np.uint8)
+
+    # Draw the paths on the image using the original coordinates
     for XYs in paths_XYs:
         for XY in XYs:
             for x, y in XY:
-                cv2.rectangle(img, (int(x), int(y)), (int(x+2), int(y+2)), (255, 255, 255), -1)
+                img_x = int(x - min_x)
+                img_y = int(y - min_y)
+                cv2.rectangle(img, (img_x, img_y), (img_x + 2, img_y + 2), (255, 255, 255), -1)
 
     # Convert to grayscale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -162,39 +123,44 @@ def main_pipeline(csv_path):
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     print(f"Found {len(contours)} contours.")
 
-    # Detect and regularize rectangle
+    # Create a new blank image to draw only the rectangle
+    rect_img = np.zeros((img_height, img_width, 3), dtype=np.uint8)
     best_rect = find_best_rectangle(contours)
-    if best_rect is not None:
-        print("Best rectangle found.")
-        regularized_corners = regularize_corners(best_rect)
-        cv2.drawContours(img, [regularized_corners], 0, (0, 255, 0), 5)
-        print("Regularized rectangle drawn.")
-    else:
+    if best_rect is None:
         print("No rectangle found.")
-
-    # Detect lines
-    filtered_lines, lines_img = detect_lines(paths_XYs)
-    if filtered_lines:
-        print("Lines detected and drawn.")
-        img = cv2.addWeighted(img, 1, lines_img, 1, 0)
     else:
-        print("No lines detected.")
+        print("Best rectangle found.")
+        # Regularize the corners
+        regularized_corners = regularize_corners(best_rect)
+        # Extract top-left and bottom-right corners
+        top_left = np.min(regularized_corners, axis=0)
+        bottom_right = np.max(regularized_corners, axis=0)
+
+        # Ensure the rectangle is within the image bounds and adjust for thickness
+        thickness = 1
+        top_left = np.maximum(top_left, [0, 0])
+        bottom_right = np.minimum(bottom_right, [img_width - 1, img_height - 1])
+        # Draw the rectangle using cv2.rectangle
+        cv2.rectangle(rect_img, tuple(top_left), tuple(bottom_right), (0, 255, 0), thickness)
+        print("Regularized rectangle drawn.")
 
     # Detect circles
-    circle_detected, circles_img = detect_circles(paths_XYs)
-    if circle_detected:
-        print("Circle detected and drawn.")
-        img = cv2.addWeighted(img, 1, circles_img, 1, 0)
+    circle_detected, circles_img = detect_circles(img, gray)
+    if circle_detected is not None:
+        detected_circles = np.uint16(np.around(circle_detected))
+        for (x, y, r) in detected_circles[0, :]:
+            cv2.circle(rect_img, (x, y), r, (0, 255, 255), 1)
     else:
         print("No circle detected.")
-
+    
     # Save and show the result
-    cv2.imwrite('detected_shapes.png', img)
+    cv2.imwrite('detected_shapes.png', rect_img)
     print("Result saved as 'detected_shapes.png'.")
-    cv2.imshow('Detected Shapes', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 # Example usage
 csv_path = 'problems/isolated.csv'
 main_pipeline(csv_path)
+
+
