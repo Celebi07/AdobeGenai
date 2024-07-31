@@ -14,6 +14,22 @@ def read_csv(csv_path):
         path_XYs.append(XYs)
     return path_XYs
 
+# Function to approximate contours to polygons and find the best star shape
+def find_best_star(contours):
+    best_star = None
+    min_diff = float('inf')
+    for contour in contours:
+        epsilon = 0.03 * cv2.arcLength(contour, True)
+        approx = cv2.approxPolyDP(contour, epsilon, True)
+        if len(approx) == 10:  # Check if the approximated contour has 10 vertices
+            star_area = cv2.contourArea(approx)
+            contour_area = cv2.contourArea(contour)
+            area_diff = abs(contour_area - star_area)
+            if area_diff < min_diff:
+                min_diff = area_diff
+                best_star = approx
+    return best_star
+
 # Function to approximate contours to polygons and find the best rectangle
 def find_best_rectangle(contours):
     best_rect = None
@@ -92,24 +108,16 @@ def main_pipeline(csv_path):
         raise ValueError("Image not found or unable to load.")
     print("Image loaded successfully.")
 
-    # Determine the size of the image based on the coordinates
-    all_coords = np.vstack([np.vstack(XY) for XYs in paths_XYs for XY in XYs])
-    min_x, min_y = np.min(all_coords, axis=0)
-    max_x, max_y = np.max(all_coords, axis=0)
-    
-    img_width = int(max_x - min_x + 1)
-    img_height = int(max_y - min_y + 1)
+    # Create a blank image
+    img_size = 1000  # Adjust size as needed
+    img = np.zeros((img_size, img_size, 3), dtype=np.uint8)
 
-    # Create a blank image with the determined size
-    img = np.zeros((img_height, img_width, 3), dtype=np.uint8)
-
-    # Draw the paths on the image using the original coordinates
+    # Draw the paths on the image
     for XYs in paths_XYs:
         for XY in XYs:
             for x, y in XY:
-                img_x = int(x - min_x)
-                img_y = int(y - min_y)
-                cv2.rectangle(img, (img_x, img_y), (img_x + 2, img_y + 2), (255, 255, 255), -1)
+                cv2.rectangle(img, (int(x), int(y)), (int(x+2), int(y+2)), (255, 255, 255), -1)
+
 
     # Convert to grayscale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -124,7 +132,7 @@ def main_pipeline(csv_path):
     print(f"Found {len(contours)} contours.")
 
     # Create a new blank image to draw only the rectangle
-    rect_img = np.zeros((img_height, img_width, 3), dtype=np.uint8)
+    rect_img = np.zeros((img_size, img_size, 3), dtype=np.uint8)
     best_rect = find_best_rectangle(contours)
     if best_rect is None:
         print("No rectangle found.")
@@ -139,7 +147,7 @@ def main_pipeline(csv_path):
         # Ensure the rectangle is within the image bounds and adjust for thickness
         thickness = 1
         top_left = np.maximum(top_left, [0, 0])
-        bottom_right = np.minimum(bottom_right, [img_width - 1, img_height - 1])
+        bottom_right = np.minimum(bottom_right, [img_size - 1, img_size - 1])
         # Draw the rectangle using cv2.rectangle
         cv2.rectangle(rect_img, tuple(top_left), tuple(bottom_right), (0, 255, 0), thickness)
         print("Regularized rectangle drawn.")
@@ -152,6 +160,15 @@ def main_pipeline(csv_path):
             cv2.circle(rect_img, (x, y), r, (0, 255, 255), 1)
     else:
         print("No circle detected.")
+        
+    # Drawn stars
+    best_star = find_best_star(contours)
+    if best_star is None:
+     print("No star shape found.")
+    else:
+     print("Best star shape found.")
+     cv2.drawContours(rect_img, [best_star], -1, (0, 255, 0), 1)
+     print("Star shape drawn.")
     
     # Save and show the result
     cv2.imwrite('detected_shapes.png', rect_img)
