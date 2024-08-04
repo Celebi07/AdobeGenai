@@ -66,9 +66,9 @@ def detect_circles(img, gray):
                               param1=50, param2=30, minRadius=0, maxRadius=0)
 
     if circles is not None:
-        return circles, img
+        return circles
     else:
-        return None, img
+        return None
 
 def detect_lines(paths_XYs, gray, edges, img):  
     # Apply Gaussian blur
@@ -153,31 +153,42 @@ def main_pipeline(csv_path):
         print("Regularized rectangle drawn.")
 
     # Detect circles
-    circle_detected, circles_img = detect_circles(img, gray)
+    circle_detected = detect_circles(img, gray)
     if circle_detected is not None:
         detected_circles = np.uint16(np.around(circle_detected))
         for (x, y, r) in detected_circles[0, :]:
+            # Draw the regularized circle boundary
             cv2.circle(rect_img, (x, y), r, (0, 255, 255), 1)
+            # Mask to retain pixels inside the unregularized circle
+            mask = np.zeros_like(gray)
+            cv2.circle(mask, (x, y), r, 255, -1)
+            img[mask == 0] = 0
+            # Copy the contents of the unregularized circle to the regularized circle
+            circle_contents = cv2.bitwise_and(img, img, mask=mask)
+            rect_img = cv2.bitwise_or(rect_img, circle_contents)
     else:
         print("No circle detected.")
         
-    # Drawn stars
+    # Draw stars
     best_star = find_best_star(contours)
     if best_star is None:
-     print("No star shape found.")
+        print("No star shape found.")
     else:
-     print("Best star shape found.")
-     cv2.drawContours(rect_img, [best_star], -1, (0, 255, 0), 1)
-     print("Star shape drawn.")
+        print("Best star shape found.")
+        cv2.drawContours(rect_img, [best_star], -1, (0, 255, 0), 1)
+        print("Star shape drawn.")
     
+    # Combine the images
+    combined_img = cv2.addWeighted(img, 1, rect_img, 1, 0)
+
     # Save and show the result
-    cv2.imwrite('detected_shapes.png', rect_img)
+    cv2.imwrite('detected_shapes.png', combined_img)
     print("Result saved as 'detected_shapes.png'.")
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 # Example usage
-csv_path = 'problems/isolated.csv'
+csv_path = 'problems/frag0.csv'
 main_pipeline(csv_path)
 
 
