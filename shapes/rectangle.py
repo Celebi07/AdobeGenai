@@ -14,28 +14,17 @@ def read_csv(csv_path):
         path_XYs.append(XYs)
     return path_XYs
 
-
-def plot(paths_XYs):
-    fig, ax = plt.subplots(tight_layout=True, figsize=(8, 8))
-    colours = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
-    for i, XYs in enumerate(paths_XYs):
-        c = colours[i % len(colours)]
-        for XY in XYs:
-            ax.plot(XY[:, 0], XY[:, 1], c=c, linewidth=2) 
-    ax.set_aspect('equal')
-    plt.show()
-
 # Function to approximate contours to polygons and find the best rectangle
 def find_best_rectangle(contours):
     best_rect = None
     min_diff = float('inf')
     for contour in contours:
-        epsilon = 0.02 * cv2.arcLength(contour, True)
+        epsilon = 0.03 * cv2.arcLength(contour, True)
         approx = cv2.approxPolyDP(contour, epsilon, True)
         if len(approx) == 4:  # Check if the approximated contour has 4 vertices
             rect = cv2.minAreaRect(approx)
             box = cv2.boxPoints(rect)
-            box = np.int32(box)
+            box = np.int0(box)
             # Calculate the difference between the contour area and the rectangle area
             contour_area = cv2.contourArea(contour)
             rect_area = cv2.contourArea(box)
@@ -49,17 +38,16 @@ def find_best_rectangle(contours):
 def regularize_corners(corners):
     rect = cv2.minAreaRect(np.array(corners))
     box = cv2.boxPoints(rect)
-    box = np.int32(box)
+    box = np.int0(box)
     return box
 
 # Read image
-path_XYs = read_csv('problems/isolated.csv')
-plot(path_XYs)
+path_XYs = read_csv('problems/problems/frag0.csv')
 if path_XYs is None:
     raise ValueError("Image not found or unable to load.")
 print("Image loaded successfully.")
 
- # Create a blank image
+# Create a blank image
 img_size = 1000  # Adjust size as needed
 img = np.zeros((img_size, img_size, 3), dtype=np.uint8)
 
@@ -89,11 +77,27 @@ else:
     print("Best rectangle found.")
     # Regularize the corners
     regularized_corners = regularize_corners(best_rect)
-    # Draw the regularized rectangle
-    cv2.drawContours(img, [regularized_corners], 0, (0, 255, 0), 5)
+    # Extract top-left and bottom-right corners
+    top_left = np.min(regularized_corners, axis=0)
+    bottom_right = np.max(regularized_corners, axis=0)
+
+    # Ensure the rectangle is within the image bounds
+    top_left = np.maximum(top_left, [0, 0])
+    bottom_right = np.minimum(bottom_right, [img_size, img_size])
+
+    # Create a new blank image to draw only the rectangle
+    rect_img = np.zeros((img_size, img_size, 3), dtype=np.uint8)
+    # Draw the rectangle using cv2.rectangle
+    cv2.rectangle(rect_img, tuple(top_left), tuple(bottom_right), (0, 255, 0), 5)
     print("Regularized rectangle drawn.")
 
-# Save and show the result
-cv2.imwrite('regularized_rectangle.png', img)
-print("Result saved as 'regularized_rectangle.png'.")
-cv2.imshow('Regularized Rectangle', img)
+    # Save and show the result
+    cv2.imwrite('regularized_rectangle_only.png', rect_img)
+    print("Result saved as 'regularized_rectangle_only.png'.")
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+
+
+
