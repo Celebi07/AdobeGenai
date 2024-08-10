@@ -8,8 +8,10 @@ The goal is to develop an end-to-end process that transforms a CSV file containi
 
 ### Process
 - We read and process the CSV file to extract the paths and points. These points are then used to reconstruct the image.
-- Using OpenCV, we perform shape detection on the reconstructed image to identify and regularize geometric shapes.
-- The detected shapes are then transformed into their ideal forms, and their symmetry is analyzed and visualized.
+- **Shape Detection**: Using OpenCV, we perform shape detection on the reconstructed image to identify and regularize geometric shapes.
+- **RDP Algorithm**: The Ramer-Douglas-Peucker (RDP) algorithm is applied to detect and simplify polygons and lines, ensuring that the detected shapes are accurately represented with fewer points while retaining the overall structure.
+- **Regularization**: The detected shapes are transformed into their ideal forms, smoothing boundaries and refining edges.
+- **Symmetry Detection**: We then analyze and visualize the symmetry of the regularized shapes, identifying axes of symmetry or central points.
 
 The approach leverages OpenCV's contour detection and various mathematical techniques to achieve regularization and symmetry detection for the shapes derived from the CSV input.
 
