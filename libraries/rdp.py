@@ -1,5 +1,4 @@
 import pandas as pd
-from turtle import pd
 from rdp import rdp
 
 def straightenLine(lines) : 
