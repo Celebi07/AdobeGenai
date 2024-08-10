@@ -1,2 +1,0 @@
-
-    # print(detected_class)
