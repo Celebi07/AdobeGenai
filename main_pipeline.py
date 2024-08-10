@@ -108,11 +108,6 @@ def main_pipeline(csv_path):
         cropped_image_path = f"cropped_{detected_class}.png"
         cv2.imwrite(cropped_image_path, cropped_img)
     
-    # print(detected_class)
-
-    # Draw the paths on the image
-
-
     # Convert to grayscale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -122,8 +117,8 @@ def main_pipeline(csv_path):
     # Find contours of the irregular shapes
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Create a new blank image 
-    regularised_img = np.zeros((img_size, img_size, 3), dtype=np.uint8)
+    # Create a new blank image with a white background
+    regularised_img = np.ones((img_size, img_size, 3), dtype=np.uint8) * 255
     
     # Identify rectangle and draw a regularised version of it
     best_rect = detect_function.find_best_rectangle(contours)
@@ -138,7 +133,7 @@ def main_pipeline(csv_path):
         bottom_right = np.max(regularized_corners, axis=0)
 
         # Ensure the rectangle is within the image bounds and adjust for thickness
-        thickness = 1
+        thickness = 2
         top_left = np.maximum(top_left, [0, 0])
         bottom_right = np.minimum(bottom_right, [img_size - 1, img_size - 1])
         # Draw the rectangle using cv2.rectangle
@@ -150,7 +145,7 @@ def main_pipeline(csv_path):
         detected_circles = np.uint16(np.around(circle_detected))
         for (x, y, r) in detected_circles[0, :]:
             # Draw the regularized circle boundary
-            cv2.circle(regularised_img, (x, y), r, (0, 255, 255), 1)
+            cv2.circle(regularised_img, (x, y), r, (0, 255, 0), 2)
             print("Circle found - 1")
     else:
        print("Circle found - 0")
@@ -161,7 +156,7 @@ def main_pipeline(csv_path):
         print("Star found - 0")
     else:
         print("Star found - 1")
-        cv2.drawContours(regularised_img, [best_star], -1, (0, 255, 0), 1)
+        cv2.drawContours(regularised_img, [best_star], -1, (0, 255, 0), 2)
         
     # Create a new blank image 
     symmetry_img = regularised_img.copy() 
@@ -182,8 +177,6 @@ def main_pipeline(csv_path):
     cv2.imwrite('regularised_image.png', regularised_img)
     cv2.imwrite('symmetric_image.png', symmetry_img)
     print("Result saved as regularised_image.png and symmetric_image.png.")
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
 
 # Input of the CSV 
 csv_path = input("Enter the path of csv file : ")
