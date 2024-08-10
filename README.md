@@ -1,12 +1,19 @@
 # CurveCraft: A Journey into the World of Curves
 
 ## Project Overview
-The goal is to develop an end-to-end process that transforms a PNG (raster) image of line art into a set of curves. These curves are defined as a connected sequence of cubic Bezier curves.
+The goal is to develop an end-to-end process that transforms a CSV file containing line art data into a set of curves. These curves are defined as a connected sequence of cubic Bezier curves.
 
-To simplify the problem, instead of starting with a PNG input, the line art is initially presented as polylines. These polylines are a finite sequence of points in 2D space.
+### Input
+- The input is a CSV file that represents the line art as a sequence of points (polylines) in 2D space.
 
-### Input:
-- A finite subset of paths in 2D Euclidean space, represented as a CSV file containing the sequence of points.
+### Process
+- We read and process the CSV file to extract the paths and points. These points are then used to reconstruct the image.
+- **Shape Detection**: Using OpenCV, we perform shape detection on the reconstructed image to identify and regularize geometric shapes.
+- **RDP Algorithm**: The Ramer-Douglas-Peucker (RDP) algorithm is applied to detect and simplify polygons and lines, ensuring that the detected shapes are accurately represented with fewer points while retaining the overall structure.
+- **Regularization**: The detected shapes are transformed into their ideal forms, smoothing boundaries and refining edges.
+- **Symmetry Detection**: We then analyze and visualize the symmetry of the regularized shapes, identifying axes of symmetry or central points.
+
+The approach leverages OpenCV's contour detection and various mathematical techniques to achieve regularization and symmetry detection for the shapes derived from the CSV input.
 
 ### Expected Output:
 - Another set of paths with regularized shapes that exhibit the properties of symmetry, completeness, and beauty.
@@ -21,7 +28,7 @@ To simplify the problem, instead of starting with a PNG input, the line art is i
 
 ### 2. Contouring and Mathematical Techniques
 - **OpenCV and Numpy**: We utilize contouring and mathematical approaches (using OpenCV) to identify and regularize detected shapes.
-- 
+  
 ### 3. Regularization Process
 - **Shape Regularization**: Detected shapes are regularized by adjusting their geometric properties to achieve a more uniform and ideal form. This may involve refining edges, smoothing boundaries, or adjusting vertices to align with specific geometric constraints. The goal is to transform irregular shapes into their most symmetric and well-defined versions.
 
