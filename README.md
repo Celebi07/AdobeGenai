@@ -1,49 +1,182 @@
-# CurveCraft: Advanced Framework for Curve Regularization and Symmetry Analysis
+<a name="readme-top"></a>
 
-Welcome to **CurveCraft**, a project dedicated to refining line art into precise and visually balanced curves. By applying cutting-edge shape detection, mathematical techniques, and curve completion strategies, **CurveCraft** brings both accuracy and aesthetic appeal to 2D curve analysis and visualization.
+<!-- PROJECT LOGO -->
+<br />
+<h1 align="center">CurveCraft: Advanced Framework for Curve Regularization and Symmetry Analysis</h1>
+<div align="center">
+  <a href="https://github.com/Celebi07/AdobeGenai">
+    <img src="images\4.png">
+  </a>
+  <p>
+    Welcome to <b>CurveCraft</b>, a project dedicated to refining line art into precise and visually balanced curves. By applying cutting-edge shape detection, mathematical techniques, and curve completion strategies, <b>CurveCraft</b> brings both accuracy and aesthetic appeal to 2D curve analysis and visualization.
+  <br />
+    <br />
+    <a href="https://youtu.be/7Y2kOU450fU">View Demo</a>
+    ·
+    <a href="https://github.com/Celebi07/AdobeGenai/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/Celebi07/AdobeGenai/issues">Request Feature</a>
+  </p>
+</div>
 
-## Project Overview
 
-### Objective
-Our goal is to develop a complete pipeline that takes a CSV file of polylines representing line art and transforms it into a set of connected cubic Bezier curves. These curves are optimized for symmetry, regularization, and completeness.
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary><h2> Table of Contents </h2></summary>
+  <ol>
+    <li>
+      <a href="#abouttheproject"> About The Project </a>
+      <ul>
+        <li><a href="#mission"> Mission </a></li>
+        <li><a href="#valueproposition"> Value Proposition </a></li>
+      </ul>
+    </li>
+    <li><a href="#keyfeatures">Key Features</a></li>
+    <li><a href="#builtwith">Built With</a></li>
+    <li><a href="#detection">Shape Detection</a></li>
+    <li>
+      <a href="#gettingstarted">Getting Started</a>
+      <ul>
+        <li><a href="#installation">Installation Instructions</a></li>
+        <li><a href="#example">Example Usage</a></li>
+      </ul>
+    </li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#team">Team Members</a></li>
+  </ol>
+</details>
 
-### Input
-- **CSV File**: The input is a CSV file that represents line art as a sequence of 2D coordinates, forming polylines that capture the original artistic design.
+<h2 id="abouttheproject"> About the Project </h2>
 
-### Process Workflow
-1. **Data Parsing**: The CSV file is parsed to extract paths as polylines in 2D space, forming the foundation for further processing.
-2. **Geometric Shape Detection**: Using OpenCV and a custom-trained YOLO model, we detect fundamental geometric shapes in the reconstructed image.
-3. **RDP Simplification**: The Ramer-Douglas-Peucker (RDP) algorithm is applied to simplify each shape, reducing vertices while maintaining the essence of the polygons and lines.
-4. **Shape Regularization**: Detected shapes are then regularized, smoothing boundaries and aligning vertices to meet geometric standards.
-5. **Symmetry Analysis**: We analyze the regularized shapes for symmetry, identifying symmetry axes or central points to enhance the coherence of the output curves.
-6. **Curve Completion**: For incomplete curves, our curve completion model uses symmetry information to seamlessly finish the curves, ensuring they are continuous and geometrically accurate.
+Welcome to CurveCraft! Our project is dedicated to identifying, regularizing, beautifying, and completing a variety of curves and shapes in 2D Euclidean space. We aim to enhance and refine these curves, starting with basic forms and advancing to more complex shapes. This initiative is part of the "Adobe GenSolve - Innovate to Impact" Hackathon, in collaboration with GeeksForGeeks.
 
-### Output
-- **Curves**: The output is a set of mathematically refined and visually appealing cubic Bezier curves.
-- **SVG Rendering**: These curves are rendered in SVG format for high-quality visualization on web browsers and other vector graphic platforms.
 
-## Technical Approach
+Watch demo [here](https://youtu.be/7Y2kOU450fU) 
 
-### 1. Geometric Shape Detection
-We use a custom-trained **YOLO Model** to detect and classify fundamental geometric shapes like rectangles, circles, and stars in the image.
+<h3 id="mission"> Mission: </h3>
+
+Our mission is to identify and enhance curves in 2D space. We’ll start by working with closed curves and gradually move on to more intricate shapes. Along the way, we’ll focus on improving the symmetry of curves and completing any incomplete ones.
+
+<h3 id="valueproposition"> Value Proposition: </h3>
+
+1. **Comprehensive Curve Refinement**: Our workflow transforms raw data into well-defined curves by leveraging advanced techniques in shape detection and simplification. This ensures high-quality, accurate representations of complex shapes.
+
+2. **Enhanced Precision with Custom Models**: By incorporating a custom-trained YOLO model, OpenCV, and mathematical equations along with the RDP algorithm, we achieve precise detection and simplification of geometric shapes. This combination ensures that curves and shapes are accurately fitted, leading to smooth and geometrically sound results.
+
+3. **Seamless Integration of Symmetry and Completion**: We enhance curve continuity and visual coherence through advanced symmetry analysis and curve completion techniques, ensuring that even incomplete or irregular curves are finished to perfection.
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<h2 id="keyfeatures"> Key Features </h2>
+
+### Key Features
+
+1. **Flexible Data Handling and Visualization**: Processes data from CSV files to extract polylines, and outputs results in SVG format for clear, scalable visualization, making it adaptable to various input formats and easy to integrate into design tools.
+
+2. **Curve Regularization and Completion**: Regularizes shapes by smoothing boundaries and aligning vertices, while also employing advanced techniques to complete incomplete curves using symmetry information for continuous and geometrically sound results.
+
+3. **Advanced Detection and Simplification**: Combines a custom-trained YOLO model, OpenCV, and the RDP algorithm for precise detection and simplification of geometric shapes, ensuring accurate and smooth curves.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<h2 id="builtwith"> Built with </h2>
+ 
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white) ![OpenCV](https://img.shields.io/badge/opencv-%23white.svg?style=for-the-badge&logo=opencv&logoColor=white) ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white) ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white) 
+
+<h3> Open Source Pre-trained Models: </h3>
+
+- [YOLO](https://github.com/pjreddie/darknet)
+
+<h3> Protocols Used </h3>
+
+- [RDP](https://github.com/FreeRDP/FreeRDP)
+- [Scipy](https://github.com/scipy/scipy)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<h2 id="detection"> Shape Detection </h2>
+
+### CurveCraft employs a comprehensive approach to curve identification and refinement, combining the strengths of YOLO, OpenCV, and mathematical equations. 
+
+### [YOLO](https://github.com/pjreddie/darknet):
+
+- Serves as the core detection tool, leveraging a custom-trained model to accurately identify fundamental geometric shapes in images.
+- Provides a robust foundation for shape detection, enabling precise identification of various curves and shapes.
 
 ![Shape Detection in Action](./images/i1.gif)
 
-### 2. Contouring and Mathematical Optimization
-Advanced contouring techniques in **OpenCV** and **Numpy** are used to identify and regularize geometric contours with precision.
+### [OpenCV and Mathematical Equations](https://github.com/opencv/opencv):
 
-### 3. Regularization Protocol
-Our regularization process refines the shapes by realigning vertices, smoothing boundaries, and enforcing geometric constraints, resulting in idealized forms.
+- Built upon YOLO's detections, uses OpenCV and mathematical equations for further analysis and refinement of detected shapes.
+- Enhances the accuracy of shape fitting and curve simplification, ensuring smooth and geometrically sound results.
 
 ![Shape Regularization](images/i2.gif)
-
-### 4. Symmetry Detection and Enhancement
-We compute symmetry lines and axes based on the regularized shapes, improving both visual and structural symmetry.
-
-### 5. Advanced Curve Completion
-We identify and complete incomplete curves using a sophisticated algorithm that leverages symmetry lines to accurately extrapolate and finalize the curves.
-
 ![Curve Completion](images/i3.png)
 
-## Conclusion
-**CurveCraft** integrates geometric shape detection, contour regularization, symmetry analysis, and curve completion techniques into a powerful framework. The result is the transformation of raw line art into regularized, symmetrical, and visually appealing curves, rendered precisely in SVG format.
+### Key Advantages:
+
+- **High Precision Detection**: YOLO’s custom-trained model offers accurate identification of fundamental geometric shapes, enhancing the precision of curve detection and simplification.
+- **Advanced Refinement**: Leveraging OpenCV and mathematical equations, CurveCraft ensures smooth and geometrically accurate results, improving the overall quality of the processed curves.
+- **Flexible and Scalable**: The system's ability to handle diverse data formats and output results in PNG format supports seamless integration into various design and analysis workflows.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<h2 id="gettingstarted"> Getting Started </h2>
+
+<h3 id="installation"> Installation Instructions: </h3>
+
+To setup CurveCraft in your local macVhine, you need to have the following prerequisites installed on your system:
+
+1. **Python 3.8 or higher:** [Download and install Python](https://www.python.org/downloads/) if you haven't already.
+
+
+Once you have the prerequisites, you can set up CurveCraft by following these steps:
+
+1. **Clone the repository:**
+
+   ```
+   git clone https://github.com/Celebi07/AdobeGenai
+   ```
+
+2. **Navigate to the project directory:**
+   ```
+   cd AdobeGenai
+   ```
+3. **Install dependencies:**
+   ```
+   pip install -r requirements.txt
+   ```
+
+
+<h3 id="example"> Example Usage: </h3>
+
+To see CurveCraft in action, check out our demo or refer to the detailed example usage guide in our documentation:
+
+- **Demo:** [Watch the Demo](https://youtu.be/jKpPOpVc6yM)
+- **Workflow:** [Checkout the workflow outputs](./docs/workflow.md)
+
+Feel free to explore and experiment with the provided examples to understand how to make the most out of CurveCraft for your projects.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<h2 id="license"> License </h2>
+
+CurveCraft is licensed under the MIT license. For more information, please see the [LICENSE](LICENSE) file in the repository.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<h2 id="contributing"> Contributing </h2>
+
+We welcome contributions! For detailed instructions on how to contribute, please refer to the [Contributing Guide](docs/contributing.md) in our documentation.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<h2 id="team"> Team Members </h2>
+
+- [Kashish Garg](https://github.com/Celebi07)
+- [Disha Dwivedi](https://github.com/Dis1309)
+- [Samarth Sahu](https://github.com/Samcoding5854)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
