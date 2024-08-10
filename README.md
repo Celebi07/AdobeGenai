@@ -26,7 +26,7 @@ The approach leverages OpenCV's contour detection and various mathematical techn
 
 ### 2. Contouring and Mathematical Techniques
 - **OpenCV and Numpy**: We utilize contouring and mathematical approaches (using OpenCV) to identify and regularize detected shapes.
-- 
+  
 ### 3. Regularization Process
 - **Shape Regularization**: Detected shapes are regularized by adjusting their geometric properties to achieve a more uniform and ideal form. This may involve refining edges, smoothing boundaries, or adjusting vertices to align with specific geometric constraints. The goal is to transform irregular shapes into their most symmetric and well-defined versions.
 
