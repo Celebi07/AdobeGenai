@@ -27,7 +27,7 @@ The primary objective is to develop an end-to-end pipeline that ingests a CSV fi
 ### 1. Geometric Shape Detection
 A custom-trained **YOLO Model** is employed to accurately detect and classify fundamental geometric shapes such as rectangles, circles, and stars within the reconstructed image.
 
-![Shape Detection in Action](./images/i1-ezgif.com-crop.gif)
+![Shape Detection in Action](./images/i1.gif)
 
 ### 2. Contouring and Mathematical Optimization
 Advanced contouring techniques, facilitated by **OpenCV** and **Numpy**, are applied to the detected shapes. These techniques enable precise identification and subsequent regularization of geometric contours.
@@ -35,7 +35,7 @@ Advanced contouring techniques, facilitated by **OpenCV** and **Numpy**, are app
 ### 3. Regularization Protocol
 A meticulous regularization protocol is implemented to refine the geometric properties of detected shapes. This includes vertex realignment, boundary smoothing, and the enforcement of geometric constraints to achieve idealized shapes.
 
-![Shape Regularization](images/i3-ezgif.com-crop.gif)
+![Shape Regularization](images/i2.gif)
 
 ### 4. Symmetry Detection and Enhancement
 Symmetry lines and axes are rigorously computed based on the regularized geometry of the shapes. This analysis enhances the visual and structural symmetry, contributing to the overall aesthetic and mathematical integrity of the curves.
@@ -43,7 +43,7 @@ Symmetry lines and axes are rigorously computed based on the regularized geometr
 ### 5. Advanced Curve Completion
 Incomplete curves are identified and completed through an advanced curve completion algorithm. This model leverages the detected symmetry lines to accurately extrapolate and finalize the curves, resulting in seamless, continuous shapes.
 
-![Curve Completion](images/i2-ezgif.com-crop.png)
+![Curve Completion](images/i3.png)
 
 ## Conclusion
 **CurveCraft** represents a sophisticated integration of geometric shape detection, contour regularization, symmetry analysis, and curve completion techniques. The result is a powerful framework capable of transforming raw line art data into highly regularized, symmetrical, and visually harmonious curves, rendered with precision in SVG format.
