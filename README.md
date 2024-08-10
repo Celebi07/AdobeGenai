@@ -32,8 +32,6 @@ A custom-trained **YOLO Model** is employed to accurately detect and classify fu
 ### 2. Contouring and Mathematical Optimization
 Advanced contouring techniques, facilitated by **OpenCV** and **Numpy**, are applied to the detected shapes. These techniques enable precise identification and subsequent regularization of geometric contours.
 
-![Contour Processing](./images/i1-ezgif.com-crop.gif)
-
 ### 3. Regularization Protocol
 A meticulous regularization protocol is implemented to refine the geometric properties of detected shapes. This includes vertex realignment, boundary smoothing, and the enforcement of geometric constraints to achieve idealized shapes.
 
