@@ -1,50 +1,49 @@
-# CurveCraft: A Comprehensive Framework for Advanced Curve Regularization and Symmetry Analysis
+# CurveCraft: Advanced Framework for Curve Regularization and Symmetry Analysis
 
-Welcome to **CurveCraft**, a cutting-edge project designed to transform line art data into mathematically refined and visually harmonious curves. Leveraging state-of-the-art shape detection algorithms, advanced mathematical techniques, and sophisticated curve completion strategies, **CurveCraft** brings precision and elegance to the analysis and visualization of 2D curves.
+Welcome to **CurveCraft**, a project dedicated to refining line art into precise and visually balanced curves. By applying cutting-edge shape detection, mathematical techniques, and curve completion strategies, **CurveCraft** brings both accuracy and aesthetic appeal to 2D curve analysis and visualization.
 
 ## Project Overview
 
 ### Objective
-The primary objective is to develop an end-to-end pipeline that ingests a CSV file containing polyline representations of line art and outputs a set of connected cubic Bezier curves. These curves are optimized for symmetry, regularization, and completeness.
+Our goal is to develop a complete pipeline that takes a CSV file of polylines representing line art and transforms it into a set of connected cubic Bezier curves. These curves are optimized for symmetry, regularization, and completeness.
 
 ### Input
-- **CSV File**: The input dataset is a CSV file representing the line art as a sequence of 2D coordinates, corresponding to polylines that approximate the original artistic intent.
+- **CSV File**: The input is a CSV file that represents line art as a sequence of 2D coordinates, forming polylines that capture the original artistic design.
 
 ### Process Workflow
-1. **Data Parsing**: The CSV file is parsed to extract and reconstruct paths as polylines in 2D Euclidean space, serving as the basis for subsequent processing.
-2. **Geometric Shape Detection**: Using OpenCV and a custom-trained YOLO model, the reconstructed image undergoes a comprehensive shape detection phase to identify fundamental geometric structures.
-3. **RDP Simplification**: The Ramer-Douglas-Peucker (RDP) algorithm is applied to each detected shape, effectively reducing the number of vertices while preserving the structural integrity of the polygons and lines.
-4. **Shape Regularization**: Detected geometric shapes are subjected to a rigorous regularization process, optimizing their form by smoothing boundaries and aligning vertices according to geometric constraints.
-5. **Symmetry Analysis**: The regularized shapes are further analyzed for symmetry, with symmetry axes or central points identified to enhance the visual and mathematical coherence of the output curves.
-6. **Curve Completion**: For any incomplete curves detected, a sophisticated curve completion model is employed. This model utilizes the symmetry information to extrapolate and seamlessly complete the curves, ensuring continuity and geometric fidelity.
+1. **Data Parsing**: The CSV file is parsed to extract paths as polylines in 2D space, forming the foundation for further processing.
+2. **Geometric Shape Detection**: Using OpenCV and a custom-trained YOLO model, we detect fundamental geometric shapes in the reconstructed image.
+3. **RDP Simplification**: The Ramer-Douglas-Peucker (RDP) algorithm is applied to simplify each shape, reducing vertices while maintaining the essence of the polygons and lines.
+4. **Shape Regularization**: Detected shapes are then regularized, smoothing boundaries and aligning vertices to meet geometric standards.
+5. **Symmetry Analysis**: We analyze the regularized shapes for symmetry, identifying symmetry axes or central points to enhance the coherence of the output curves.
+6. **Curve Completion**: For incomplete curves, our curve completion model uses symmetry information to seamlessly finish the curves, ensuring they are continuous and geometrically accurate.
 
 ### Output
-- **Curves**: The output consists of a set of mathematically optimized and visually appealing paths, characterized by smooth, continuous cubic Bezier curves.
-- **SVG Rendering**: The final curves are rendered in SVG format, allowing for high-fidelity visualization in web browsers and other vector graphic-compatible platforms.
+- **Curves**: The output is a set of mathematically refined and visually appealing cubic Bezier curves.
+- **SVG Rendering**: These curves are rendered in SVG format for high-quality visualization on web browsers and other vector graphic platforms.
 
 ## Technical Approach
 
 ### 1. Geometric Shape Detection
-A custom-trained **YOLO Model** is employed to accurately detect and classify fundamental geometric shapes such as rectangles, circles, and stars within the reconstructed image.
+We use a custom-trained **YOLO Model** to detect and classify fundamental geometric shapes like rectangles, circles, and stars in the image.
 
 ![Shape Detection in Action](./images/i1.gif)
 
 ### 2. Contouring and Mathematical Optimization
-Advanced contouring techniques, facilitated by **OpenCV** and **Numpy**, are applied to the detected shapes. These techniques enable precise identification and subsequent regularization of geometric contours.
+Advanced contouring techniques in **OpenCV** and **Numpy** are used to identify and regularize geometric contours with precision.
 
 ### 3. Regularization Protocol
-A meticulous regularization protocol is implemented to refine the geometric properties of detected shapes. This includes vertex realignment, boundary smoothing, and the enforcement of geometric constraints to achieve idealized shapes.
+Our regularization process refines the shapes by realigning vertices, smoothing boundaries, and enforcing geometric constraints, resulting in idealized forms.
 
 ![Shape Regularization](images/i2.gif)
 
 ### 4. Symmetry Detection and Enhancement
-Symmetry lines and axes are rigorously computed based on the regularized geometry of the shapes. This analysis enhances the visual and structural symmetry, contributing to the overall aesthetic and mathematical integrity of the curves.
+We compute symmetry lines and axes based on the regularized shapes, improving both visual and structural symmetry.
 
 ### 5. Advanced Curve Completion
-Incomplete curves are identified and completed through an advanced curve completion algorithm. This model leverages the detected symmetry lines to accurately extrapolate and finalize the curves, resulting in seamless, continuous shapes.
+We identify and complete incomplete curves using a sophisticated algorithm that leverages symmetry lines to accurately extrapolate and finalize the curves.
 
 ![Curve Completion](images/i3.png)
 
 ## Conclusion
-**CurveCraft** represents a sophisticated integration of geometric shape detection, contour regularization, symmetry analysis, and curve completion techniques. The result is a powerful framework capable of transforming raw line art data into highly regularized, symmetrical, and visually harmonious curves, rendered with precision in SVG format.
-
+**CurveCraft** integrates geometric shape detection, contour regularization, symmetry analysis, and curve completion techniques into a powerful framework. The result is the transformation of raw line art into regularized, symmetrical, and visually appealing curves, rendered precisely in SVG format.
