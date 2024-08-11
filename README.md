@@ -11,7 +11,7 @@
     Welcome to <b>CurveCraft</b>, a project dedicated to refining line art into precise and visually balanced curves. By applying cutting-edge shape detection, mathematical techniques, and curve completion strategies, <b>CurveCraft</b> brings both accuracy and aesthetic appeal to 2D curve analysis and visualization.
   <br />
     <br />
-    <a href="https://youtu.be/7Y2kOU450fU">View Demo</a>
+    <a href="https://youtu.be/wwEsB4TX-uM">View Demo</a>
     ·
     <a href="https://github.com/Celebi07/AdobeGenai/issues">Report Bug</a>
     ·
@@ -60,7 +60,7 @@
 Welcome to CurveCraft! Our project is dedicated to identifying, regularizing, beautifying, and completing a variety of curves and shapes in 2D Euclidean space. We aim to enhance and refine these curves, starting with basic forms and advancing to more complex shapes. This initiative is part of the "Adobe GenSolve - Innovate to Impact" Hackathon, in collaboration with GeeksForGeeks.
 
 
-Watch demo [here](https://youtu.be/7Y2kOU450fU) 
+Watch demo [here](https://youtu.be/wwEsB4TX-uM) 
 
 <h3 id="mission"> Mission: </h3>
 
