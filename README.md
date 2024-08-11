@@ -143,7 +143,6 @@ Our mission is to identify and enhance curves in 2D space. We’ll start by work
 
 ![RDP](images\Douglas-Peucker_animated.gif)
 
-
 <br>
 
 ![Shape Regularization](images/i2.gif)
