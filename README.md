@@ -141,7 +141,7 @@ Our mission is to identify and enhance curves in 2D space. We’ll start by work
   - **Contour Plotting and RDP Algorithms**: Applies contour plotting and the RDP algorithm to perfect the star shape and ensure accuracy.
 <br>
 
-![RDP](images\Douglas-Peucker_animated.gif)
+![RDP](images/Douglas-Peucker_animated.gif)
 
 <br>
 
