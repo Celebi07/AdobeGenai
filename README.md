@@ -33,7 +33,15 @@
     </li>
     <li><a href="#keyfeatures">Key Features</a></li>
     <li><a href="#builtwith">Built With</a></li>
-    <li><a href="#detection">Shape Detection</a></li>
+    <li>
+      <a href="#main_pipeline">Main Pipeline</a>
+      <ul>
+        <li><a href="#detection">Shape Detection</a></li>
+        <li><a href="#regularization">Regularization</a></li>
+        <li><a href="#symmetry">Symmetry</a></li>
+        <li><a href="#completion">Completion</a></li>
+      </ul>
+    </li>
     <li>
       <a href="#gettingstarted">Getting Started</a>
       <ul>
@@ -69,6 +77,8 @@ Our mission is to identify and enhance curves in 2D space. We’ll start by work
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+
+
 <h2 id="keyfeatures"> Key Features </h2>
 
 ### Key Features
@@ -102,17 +112,51 @@ Our mission is to identify and enhance curves in 2D space. We’ll start by work
 
 ### [YOLO](https://github.com/pjreddie/darknet):
 
-- Serves as the core detection tool, leveraging a custom-trained model to accurately identify fundamental geometric shapes in images.
-- Provides a robust foundation for shape detection, enabling precise identification of various curves and shapes.
+- YOLO can detect and identify multiple shapes simultaneously, while traditional CNN models typically handle only one shape at a time.
+- It provides precise bounding boxes for each detected shape, allowing for targeted processing of specific areas.
+- YOLO’s efficiency in managing complex scenes with various shapes makes it more suitable for our needs compared to standard CNN models.
+
+<br>
 
 ![Shape Detection in Action](./images/i1.gif)
 
+<h2 id="regularization"> Regularization </h2>
+
 ### [OpenCV and Mathematical Equations](https://github.com/opencv/opencv):
 
-- Built upon YOLO's detections, uses OpenCV and mathematical equations for further analysis and refinement of detected shapes.
-- Enhances the accuracy of shape fitting and curve simplification, ensuring smooth and geometrically sound results.
+- **Straight Lines and Derived Shapes (Polygons/Rectangles)**:
+  - **Ramer–Douglas–Peucker Algorithm**: Simplifies the curve by reducing the number of points while maintaining the shape's integrity.
+  - **Curve Approximation**: Ensures that the shape is represented with fewer, yet accurate, points, making it easier to analyze and process.
+
+- **Ellipses**:
+  - **Fitting to Ellipse Equation**: Points are fitted into an ellipse equation to achieve an accurate representation of the ellipse.
+  - **Bezier Curve Adjustments**: Refines the ellipse using Bezier curves to smooth and adjust the shape as needed.
+
+- **Circles**:
+  - **Hough Circle Transform**: Detects the radius and center of the circle, enabling precise regularization.
+  - **Circle Regularization**: Uses the detected parameters to standardize and refine the circle's appearance.
+
+- **Star Shapes**:
+  - **Contour Analysis**: Focuses on contours with 10 vertices to identify star-shaped patterns.
+  - **Contour Plotting and RDP Algorithms**: Applies contour plotting and the RDP algorithm to perfect the star shape and ensure accuracy.
+<br>
+
+![RDP](images\Douglas-Peucker_animated.gif)
+
+
+<br>
 
 ![Shape Regularization](images/i2.gif)
+<br>
+
+<h2 id="symmetry"> Symmetry </h2>
+- Analyze the regularized shapes for symmetry to determine if they exhibit balanced characteristics by checking each shape against potential symmetry lines.
+
+<h2 id="completion"> Curve Completion </h2>
+- For shapes identified as asymmetrical, complete them by calculating and extending along the expected symmetry line to ensure a balanced and geometrically precise final shape.
+
+<br>
+
 ![Curve Completion](images/i3.png)
 
 ### Key Advantages:
